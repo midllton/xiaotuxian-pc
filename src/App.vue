@@ -1,30 +1,31 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div>{{$store.state.username}}</div>
+  <div>{{$store.getters.newName}}</div>
+  <button @click="mutations">更改数据</button>
+  <button @click="actions">异步更改数据</button>
+  <div>{{$store.state.moduleA.name}}</div>
+  <div>{{$store.state.moduleB.name}}</div> <!-- state区分模块 -->
+  <div>{{$store.getters.updateName}}</div> <!-- 不带命名空间的调用方法 -->
+  <div>{{$store.getters['moduleB/updateName']}}</div> <!-- 注意带命名空间的调用方法 -->
 </template>
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+<script>
+import { useStore } from 'vuex'
+export default {
+  name: 'App',
+  setup () {
+    const store = useStore() // 注意引入usestore
+    const mutations = () => {
+      store.commit('updateName') // 配合vuex里的mutations（commit）
     }
+    const actions = () => {
+      store.dispatch('updateAsync') // 配合vuex里的actions（dispatch）
+    }
+    return { mutations, actions }
   }
 }
+</script>
+
+<style lang="less" scoped>
+
 </style>
